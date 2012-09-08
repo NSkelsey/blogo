@@ -1,9 +1,57 @@
 
 
-div.post {
+div.post, div.home_mess {
 width: 800px;
 word-wrap: break-word;
-border: dotted 1px;
+border-bottom: solid 2px;
 padding: 10px;
 
 }
+
+
+#woods {
+width: 100%;
+display: block;
+height: 400px;
+
+}
+
+#body {
+  padding : 10px;
+
+}
+
+div.container  {
+  width : 950px;
+  color: #333;
+  background-color: white;
+
+}
+
+
+body {
+
+  background-color: #BEC3C6;
+}
+
+
+#id_title {
+  width: 40%;
+}
+#id_body {
+  width: 80%;
+}
+
+
+a.view {
+  display:inline-block;
+}
+p.info {
+  display:inline-block;
+}
+
+
+.navbar {
+margin-bottom: 5px;
+}
+

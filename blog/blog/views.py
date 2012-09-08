@@ -7,11 +7,11 @@ from forms import UserForm, PostForm
 from django.template import RequestContext
 from django.contrib import auth
 
-from IPython import embed
 
 def home(request):
     if not request.POST:
-        posts = Post.objects.all()
+        posts = Post.objects.order_by('date_last_edit')
+        posts = posts[::-1]
         resp_dict = {'posts' : posts}
         if request.user.is_authenticated():
             pf = PostForm()
@@ -33,7 +33,7 @@ def post_sub(request):
 def show_post(request, id_num):
     if request.method == "GET":
        post = get_object_or_404(Post, pk=id_num)
-       return render_to_response('post.html',
+       return render_to_response('single_post.html',
                {'post' : post},
                 context_instance=RequestContext(request))
     else:

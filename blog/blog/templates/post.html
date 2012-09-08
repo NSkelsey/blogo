@@ -1,7 +1,16 @@
+{% load markup %}
 
+<div class=post >
+  <h4 class=title > {{ post.title }} </h4>
 
-{{ post.title }}
-<br>
-{{ post.body }}
-<br>
-{{ post.user }} <a href="{{ post.id }}/edit" >edit</a>
+  <p class=body> {{ post.body|markdown:"safe" }} </p>
+  <div class=row>
+    <div class="span6 offset6" >
+      <a class="view" href="/posts/{{ post.id }}">View</a>
+      <p class="info">Last Edited by: 
+      <a href="/user/{{ post.user }}">{{ post.user }}</a> on {{ post.date_last_edit|date:"m/d/Y h:m:s" }}
+      </p>
+
+    </div>
+  </div>
+</div>

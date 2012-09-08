@@ -3,19 +3,23 @@
 {% load markup %}
 
 {% block content %}
-<h2> This is Nick's Blog </h2>
 
 
-<br>
+
+<div class="home_mess">
+  <h3> Welcome to blog</h3>
+  <p> Steps are as follows </p>
+  <ol>
+    <li> Post ASCII art
+    <li> ???
+    <li> Profit
+  </ol>
+
+</div>
+
 
 {% for post in posts %}
-<div class=post>
-<h4 class=title > {{ post.title }} </h4>
-
-<p class=body> {{ post.body|markdown:"safe" }} </p>
-<a href="posts/{{ post.id }}">View</a>
-Last Edited by: {{ post.user }} on {{ post.date_last_edit|date:"m/d/Y h:m:s" }}
-</div>
+{% include "post.html" %}
 {% endfor %}
 <br>
 

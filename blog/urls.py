@@ -6,7 +6,6 @@ from blog import views as bviews
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
     url(r'^$', bviews.home,),
     url(r'^session$', bviews.show_sessions),
     url(r'create$', bviews.create_user),

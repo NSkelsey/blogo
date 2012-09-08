@@ -1,41 +1,71 @@
 <html>
-<head>
-  <link rel="stylesheet" type="text/css" href="static/style.css" />
-  <title> BLOG </title>
+  <head>
+    <title> BLOG </title>
 
-<script type="text/javascript">
+    <!--<script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34544670-1']);
-  _gaq.push(['_trackPageview']);
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-34544670-1']);
+      _gaq.push(['_trackPageview']);
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+      (function() {
+       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+       })();
 
-</script>
+</script> -->
+<link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/static/style.css" />
 </head>
 
 <body>
 
 
+  <div class="container" id=main > 
 
 
-<p> Hello {{ user }} </p>
-{% if user.is_authenticated %}
-<a href="/logout" >logout</a> <p> Why dont you try to <a href="/create" >Create</a> a MOFucking user</p>
-{% else %}
-<a href="/login" >login</a>
-{% endif %}
 
-<h2 id=Title> This is Nick's Blog </h2>
+  <img id=woods src="/static/woods.jpg" />
 
+  <div class="navbar">
+    <div class="navbar-inner">
+      <ul class="nav">
+        <li ><a href="/">Home</a></li>
+        <li><a href="/selfposts">Projects</a></li>
+        <li><a href="/users">Users/Stats</a></li>
+
+
+      </ul>
+      {% if user.is_authenticated %}
+      <ul class="nav pull-right">
+        <li class="dropdown">
+        <a class="dropdown-toggle " id="drop5" role="button" data-toggle="dropdown" href="#">{{ user }}<b class="caret"></b></a>
+        <ul id="menu2" class="dropdown-menu pull-right" role="menu" aria-labelledby="drop5">
+          <li><a tabindex="-1" href="/logout">Logout</a></li>
+          <li><a tabindex="-1" href="/user/{{ user }}">Profile</a></li>
+          <li><a tabindex="-1" href="/create">Create New User</a></li>
+        </ul>
+        </li>
+      </ul>
+      {% else %}
+      <ul class="nav pull-right">
+        <li ><a href="/login">Login</a></li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+
+  <div id="body"> 
   {% block content %}
   {% endblock content %}
+  </div>
 
-
+  </div>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+  
 </body>
 </html>
 
