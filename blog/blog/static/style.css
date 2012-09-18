@@ -1,6 +1,6 @@
 
 
-div.post, div.home_mess {
+div.post, div.home_mess, form.home_mess {
 width: 800px;
 word-wrap: break-word;
 border-bottom: solid 2px;

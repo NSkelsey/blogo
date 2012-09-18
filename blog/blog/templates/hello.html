@@ -17,9 +17,9 @@
 
 </div>
 
-
+<br>
 {% if post_form %}
-<form method=post action="submit_post">
+<form class="home_mess" method=post action="submit_post">
   {% csrf_token %}
   {{ post_form.as_p }}
 
