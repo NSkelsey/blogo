@@ -3,7 +3,10 @@
 <div class=post >
   <h4 class=title > {{ post.title }} </h4>
 
-  <p class=body> {{ post.body|markdown:"safe" }} </p>
+  <p class=body> {% if post.markup %}
+  {{ post.body|markdown:"safe" }} {% else %}
+  <pre>{{ post.body }}</pre>
+  {% endif %} </p>
   <div class=row>
     <div class="span6 offset6" >
       <a class="view" href="/posts/{{ post.id }}">View</a>

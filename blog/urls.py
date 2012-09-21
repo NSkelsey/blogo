@@ -15,4 +15,6 @@ urlpatterns = patterns('',
     url(r'^submit_post$', bviews.post_sub),
     url(r'^posts/(?P<id_num>\d+)$', bviews.show_post),
     url(r'^posts/(?P<id_num>\d+)/edit$', bviews.edit_post),
+    url(r'^user/(?P<name>\S+)$', bviews.user_page),
+    url(r'^freespeech$', bviews.freedom),
 )

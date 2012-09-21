@@ -1,11 +1,14 @@
 
 
 div.post, div.home_mess, form.home_mess {
-width: 800px;
-word-wrap: break-word;
-border-bottom: solid 2px;
+/*word-wrap: break-word;*/
+border-top: solid 2px;
 padding: 10px;
 
+}
+
+div.home_mess {
+border-top: 0px;
 }
 
 

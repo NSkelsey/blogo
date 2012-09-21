@@ -13,10 +13,10 @@
     <li> Post ASCII art
     <li> ???
     <li> Profit
+   
   </ol>
 
 </div>
-
 <br>
 {% if post_form %}
 <form class="home_mess" method=post action="submit_post">
@@ -25,10 +25,10 @@
 
   <input type=submit value=Post>
 </form>
+{% endif%}
 
 {% for post in posts %}
 {% include "post.html" %}
 {% endfor %}
 <br>
-{% endif %}
 {% endblock content %}

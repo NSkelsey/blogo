@@ -10,14 +10,12 @@ from django.contrib import auth
 
 def home(request):
     if not request.POST:
-        posts = Post.objects.order_by('date_last_edit')
+        posts = Post.objects.filter(quality=True).order_by('date_last_edit')
         posts = posts[::-1]
         resp_dict = {'posts' : posts}
         if request.user.is_authenticated():
             pf = PostForm()
             resp_dict["post_form"] = pf
-
-
         return render_to_response('hello.html', resp_dict,
                 context_instance=RequestContext(request))
 
@@ -26,9 +24,15 @@ def post_sub(request):
     if request.POST:
         pf = PostForm(request.POST)
         if pf.is_valid() and request.user.is_authenticated():
-            post = Post(user=request.user, title=pf.cleaned_data["title"], body=pf.cleaned_data["body"])
+            post = Post(user=request.user, title=pf.cleaned_data["title"], body=pf.cleaned_data["body"],
+                    markup=pf.cleaned_data["markup"], quality=pf.cleaned_data["quality"])
             post.save()
             return HttpResponseRedirect("/")
+    else:
+        pf = PostForm()
+    return render_to_response("sub_form.html", {
+        'form' : pf,},
+        context_instance=RequestContext(request))
 
 def show_post(request, id_num):
     if request.method == "GET":
@@ -110,4 +114,29 @@ def logged_in(request):
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect("/")
+
+
+def user_page(request, name):
+    if request.method == "GET":
+        u = User.objects.get(username=name)
+        posts = Post.objects.filter(user=u).order_by('date_last_edit')
+        posts = posts[::-1]
+        return render_to_response("user_page.html", {"the_user" : u,
+                "posts" : posts},
+                context_instance=RequestContext(request))
+    else:
+        return HttpResponse("wut")
+
+
+def freedom(request):
+    if request.method == "GET":
+        posts = Post.objects.filter(quality=False).order_by('date_last_edit')
+        posts = posts[::-1]
+        return render_to_response("freedom.html", {
+                "posts" : posts},
+                context_instance=RequestContext(request))
+    else:
+        return HttpResponse("wut")
+
+
 
