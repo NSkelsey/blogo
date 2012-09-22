@@ -11,6 +11,9 @@ div.home_mess {
 border-top: 0px;
 }
 
+h5.vote {
+  color: #FF8B60;
+}
 
 #woods {
 width: 100%;
@@ -31,6 +34,9 @@ div.container  {
 
 }
 
+pre {
+  display: inline-block;
+}
 
 body {
 

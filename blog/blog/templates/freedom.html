@@ -4,7 +4,24 @@
 
 {% block content %}
 
+<div class=home_mess>
+  <h3> This is what freedom looks like </h3>
 
+  <p> If you are faint of heart or not from the internet lookout below. </p>
+
+  <p>Feel free to post whatever, I'll only delete the things that are terrible. </p>
+
+</div>
+
+<br>
+{% if form %}
+<form class="home_mess" method=post action="submit_post">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <input type=submit value=Post>
+</form>
+{% endif %}
 {% for post in posts %}
 
 {% include "post.html" %}

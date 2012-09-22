@@ -1,0 +1,17 @@
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<h4> This page isn't going to have much on it for awhile... heres a list of everybody</h4>
+
+<ul>
+{% for u in users %}
+<li> <a href=/user/{{ u.username }} >{{ u.username }}</a> {% if u.username == "guest" %} &lt-- the password for this one is the name of my dog {% endif %}
+</li>
+{% endfor %}
+</ul>
+
+
+{% endblock content %}

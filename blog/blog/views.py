@@ -28,6 +28,12 @@ def post_sub(request):
                     markup=pf.cleaned_data["markup"], quality=pf.cleaned_data["quality"])
             post.save()
             return HttpResponseRedirect("/")
+        elif pf.is_valid():
+            anon = User.objects.get(username="anon")
+            post = Post(user=anon, title=pf.cleaned_data["title"], body=pf.cleaned_data["body"],
+                    markup=pf.cleaned_data["markup"], quality=False)
+            post.save()
+            return HttpResponseRedirect("/freespeech")
     else:
         pf = PostForm()
     return render_to_response("sub_form.html", {
@@ -37,19 +43,29 @@ def post_sub(request):
 def show_post(request, id_num):
     if request.method == "GET":
        post = get_object_or_404(Post, pk=id_num)
+       author = False
+       if request.user == post.user:
+           author = True
        return render_to_response('single_post.html',
-               {'post' : post},
+               {'post' : post, "edit": author},
                 context_instance=RequestContext(request))
     else:
         return 1
 
 def edit_post(request, id_num):
     if request.method == "POST":
+        post = get_object_or_404(Post,pk=id_num)
         pf = PostForm(request.POST)
-        if pf.is_valid() and request.user.is_authenticated():
-            
-            post = Post.objects.all()
-
+        if (pf.is_valid() and request.user.is_authenticated()
+            and request.user == post.user):
+            post.user = request.user
+            post.title = pf.cleaned_data["title"]
+            post.body = pf.cleaned_data["body"]
+            post.markup = pf.cleaned_data["markup"]
+            post.quality = pf.cleaned_data["quality"]
+            post.save()
+            return HttpResponseRedirect("/posts/" + str(id_num))
+        return HttpResponse("You aren't allowed to do that guy")
     else:
         post = get_object_or_404(Post, pk=id_num)
         pf = PostForm(initial=
@@ -59,15 +75,6 @@ def edit_post(request, id_num):
         return render_to_response("edit_post.html",
                 {"post_form": pf},
                 context_instance=RequestContext(request))
-
-def show_sessions(request):
-    if request.session["fav_color"]:
-        return HttpResponse(request.session["fav_color"])
-    request.session["fav_color"] = "2blue4u"
-
-    
-    return HttpResponse("gogoNO")
-
 
 def create_user(request):
     if request.POST:
@@ -86,7 +93,14 @@ def create_user(request):
         return render_to_response("create.html", {"form" : uf},
                 context_instance=RequestContext(request))
 
-
+def delete_post(request, id_num):
+    if request.method == "GET":
+        post = get_object_or_404(Post, pk=id_num)
+        if (request.user == post.user or request.user.username == "nick"):
+            post.delete()
+            return HttpResponse("Post Deleted")
+        else:
+            return HttpResponse("you cant delete that")
 
 def login(request):
     if request.POST:
@@ -127,16 +141,25 @@ def user_page(request, name):
     else:
         return HttpResponse("wut")
 
+def users(request):
+    if request.method == "GET":
+        users = User.objects.all()
+
+        return render_to_response("users.html", {"users": users},
+                context_instance=RequestContext(request))
+
 
 def freedom(request):
     if request.method == "GET":
+        pf = PostForm()
         posts = Post.objects.filter(quality=False).order_by('date_last_edit')
         posts = posts[::-1]
         return render_to_response("freedom.html", {
-                "posts" : posts},
+            "posts" : posts, "form": pf},
                 context_instance=RequestContext(request))
     else:
         return HttpResponse("wut")
+
 
 
 

@@ -1,8 +1,12 @@
 {% load markup %}
 
 <div class=post >
-  <h4 class=title > {{ post.title }} </h4>
-
+  <div class=row>
+    <div class="span10">
+      <h4 class=title > {{ post.title }} </h4>
+    </div>
+    <div class="span1 offset 11"><h5 class=vote >{{ post.vote_set.count }}</h3></div>
+  </div>
   <p class=body> {% if post.markup %}
   {{ post.body|markdown:"safe" }} {% else %}
   <pre>{{ post.body }}</pre>
@@ -10,10 +14,12 @@
   <div class=row>
     <div class="span6 offset6" >
       <a class="view" href="/posts/{{ post.id }}">View</a>
-      <p class="info">Last Edited by: 
+      <p class="info">Last {% if edit %}<a href="./{{ post.id }}/edit">Edit</a>{% else %}Edit{% endif %}ed by: 
       <a href="/user/{{ post.user }}">{{ post.user }}</a> on {{ post.date_last_edit|date:"m/d/Y h:m:s" }}
+      {% if user == post.user or user.username == "nick" %}
+      <a href="/posts/{{ post.id }}/delete">Delete</a>
+      {% endif %}
       </p>
-
     </div>
   </div>
 </div>

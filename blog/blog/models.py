@@ -12,4 +12,6 @@ class Post(models.Model):
 
 
 
-
+class Vote(models.Model):
+    post = models.ForeignKey(Post)
+    user = models.ForeignKey(User)
