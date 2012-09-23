@@ -1,17 +1,18 @@
-# Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.models import User
-from models import Post
-from forms import UserForm, PostForm
+from models import Post, Vote
+from forms import UserForm, PostForm, AnonPostForm, VoteForm
 from django.template import RequestContext
 from django.contrib import auth
+from django.db.models import Count
 
 
 def home(request):
     if not request.POST:
-        posts = Post.objects.filter(quality=True).order_by('date_last_edit')
-        posts = posts[::-1]
+        posts = Post.objects.filter(quality=True)\
+                .annotate(num_votes=Count('vote'))\
+                .order_by('-num_votes')
         resp_dict = {'posts' : posts}
         if request.user.is_authenticated():
             pf = PostForm()
@@ -23,15 +24,17 @@ def home(request):
 def post_sub(request):
     if request.POST:
         pf = PostForm(request.POST)
+        anonpf = AnonPostForm(request.POST)
         if pf.is_valid() and request.user.is_authenticated():
             post = Post(user=request.user, title=pf.cleaned_data["title"], body=pf.cleaned_data["body"],
-                    markup=pf.cleaned_data["markup"], quality=pf.cleaned_data["quality"])
+                    markup=(not pf.cleaned_data["markup"]), quality=pf.cleaned_data["quality"])
             post.save()
             return HttpResponseRedirect("/")
-        elif pf.is_valid():
+        elif anonpf.is_valid():
+            pf = anonpf
             anon = User.objects.get(username="anon")
             post = Post(user=anon, title=pf.cleaned_data["title"], body=pf.cleaned_data["body"],
-                    markup=pf.cleaned_data["markup"], quality=False)
+                    markup=(not pf.cleaned_data["markup"]), quality=False)
             post.save()
             return HttpResponseRedirect("/freespeech")
     else:
@@ -144,14 +147,13 @@ def user_page(request, name):
 def users(request):
     if request.method == "GET":
         users = User.objects.all()
-
         return render_to_response("users.html", {"users": users},
                 context_instance=RequestContext(request))
 
 
 def freedom(request):
     if request.method == "GET":
-        pf = PostForm()
+        pf = AnonPostForm()
         posts = Post.objects.filter(quality=False).order_by('date_last_edit')
         posts = posts[::-1]
         return render_to_response("freedom.html", {
@@ -160,6 +162,29 @@ def freedom(request):
     else:
         return HttpResponse("wut")
 
+
+def vote(request, id_num):
+    vf = VoteForm(request.POST or None)
+    post = get_object_or_404(Post, pk=id_num)
+    if request.method == "POST" and vf.is_valid():
+        if request.user.is_authenticated():
+            user = request.user
+        else:
+            user = User.objects.get(username="anon")
+        vote = Vote(post=post, user=user, ip=request.META["REMOTE_ADDR"])
+        vote.save()
+        return HttpResponseRedirect(request.META["HTTP_REFERER"])
+
+    return render_to_response("vote.html",
+            {"form": vf},
+            context_instance=RequestContext(request))
+
+def projects(request):
+    posts = Post.objects.filter(user=User.objects.get(username="nskelsey")).order_by('date_post')
+    posts = posts[::-1]
+    return render_to_response("projects.html",
+            {"posts" : posts},
+            context_instance=RequestContext(request))
 
 
 

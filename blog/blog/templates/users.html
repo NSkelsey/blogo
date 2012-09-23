@@ -4,11 +4,11 @@
 
 {% block content %}
 
-<h4> This page isn't going to have much on it for awhile... heres a list of everybody</h4>
+<h4> This page isn't going to have much on it for awhile... heres a list of everybody with vote counts</h4>
 
 <ul>
 {% for u in users %}
-<li> <a href=/user/{{ u.username }} >{{ u.username }}</a> {% if u.username == "guest" %} &lt-- the password for this one is the name of my dog {% endif %}
+<li> <a href=/user/{{ u.username }} >{{ u.username }}</a> {{ u.vote_set.all|length }} {% if u.username == "guest" %} &lt-- the password for this one is the name of my dog {% endif %}
 </li>
 {% endfor %}
 </ul>

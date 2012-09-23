@@ -43,6 +43,10 @@ body {
   background-color: #BEC3C6;
 }
 
+input.vote_button {
+  display:hidden;
+}
+
 
 #id_title {
   width: 40%;

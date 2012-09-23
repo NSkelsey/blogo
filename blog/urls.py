@@ -1,9 +1,6 @@
 from django.conf.urls import patterns, include, url
 from blog import views as bviews
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', bviews.home,),
@@ -18,4 +15,6 @@ urlpatterns = patterns('',
     url(r'^user/(?P<name>\S+)$', bviews.user_page),
     url(r'^users$', bviews.users),
     url(r'^freespeech$', bviews.freedom),
+    url(r'^posts/(?P<id_num>\d+)/vote$', bviews.vote),
+    url(r'^projects$', bviews.projects),
 )

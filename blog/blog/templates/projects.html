@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h4> Here are some projects I have worked on. This constitutes an informal resume</h4>
+
+<br>
+{% for post in posts %}
+
+{% include 'post.html' %}
+
+{% endfor %}
+
+
+
+{% endblock content %}
+

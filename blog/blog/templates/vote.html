@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<form method=post action="vote">
+  {% csrf_token %}
+  {{ form }}
+  <input type=submit value=VOTE>
+</form>
+
+{% endblock content %}
