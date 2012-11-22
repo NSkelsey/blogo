@@ -12,9 +12,7 @@ MANAGERS = ADMINS
 
 
 
-# on home server
-# uname = blog
-# pw = 'blank CDS'
+DATABASES = {}
 
 import dj_database_url
 DATABASES['default'] = dj_database_url.config()
